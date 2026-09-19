@@ -1,0 +1,2097 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Study Planner - Dashboard</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6ff;
+            color: #1f2937;
+            overflow-x: hidden;
+        }
+
+
+        /* ==============================
+           BACKGROUND DOODLES
+        ============================== */
+
+        .background-doodles {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .doodle {
+            position: absolute;
+            opacity: 0.10;
+            font-weight: bold;
+            color: #4f46e5;
+            user-select: none;
+        }
+
+        .d1 {
+            top: 8%;
+            left: 3%;
+            font-size: 80px;
+            transform: rotate(-15deg);
+        }
+
+        .d2 {
+            top: 18%;
+            right: 5%;
+            font-size: 70px;
+            transform: rotate(15deg);
+        }
+
+        .d3 {
+            top: 40%;
+            left: 7%;
+            font-size: 90px;
+            transform: rotate(10deg);
+        }
+
+        .d4 {
+            top: 55%;
+            right: 6%;
+            font-size: 85px;
+            transform: rotate(-15deg);
+        }
+
+        .d5 {
+            top: 75%;
+            left: 4%;
+            font-size: 70px;
+        }
+
+        .d6 {
+            top: 85%;
+            right: 12%;
+            font-size: 90px;
+        }
+
+        .d7 {
+            top: 30%;
+            left: 45%;
+            font-size: 60px;
+        }
+
+        .d8 {
+            top: 68%;
+            right: 35%;
+            font-size: 65px;
+        }
+
+
+        /* ==============================
+           MAIN CONTAINER
+        ============================== */
+
+        .container {
+            width: 92%;
+            max-width: 1250px;
+            margin: auto;
+            position: relative;
+            z-index: 2;
+        }
+
+
+        /* ==============================
+           TOP BAR
+        ============================== */
+
+        .topbar {
+            margin-top: 25px;
+            padding: 18px 25px;
+
+            background: white;
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 8px 25px rgba(0,0,0,0.08);
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 15px;
+
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: #4f46e5;
+        }
+
+        .user-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .welcome {
+            font-weight: bold;
+            color: #374151;
+        }
+
+        .logout-btn {
+            text-decoration: none;
+            background: #ef4444;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+
+        /* ==============================
+           HERO
+        ============================== */
+
+        .hero {
+            margin-top: 25px;
+
+            padding: 45px 35px;
+
+            border-radius: 28px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #4f46e5,
+                    #7c3aed,
+                    #ec4899
+                );
+
+            box-shadow:
+                0 12px 35px rgba(79,70,229,0.25);
+
+            text-align: center;
+        }
+
+        .hero h1 {
+            margin: 0 0 12px;
+            font-size: 38px;
+        }
+
+        .hero p {
+            margin: 0;
+            font-size: 17px;
+            opacity: 0.95;
+        }
+
+
+        /* ==============================
+           STAT CARDS
+        ============================== */
+
+        .stats {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 18px;
+
+            margin-top: 25px;
+        }
+
+        .stat-card {
+            background: white;
+
+            border-radius: 20px;
+
+            padding: 25px;
+
+            text-align: center;
+
+            box-shadow:
+                0 8px 25px rgba(0,0,0,0.07);
+
+            transition: 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            font-size: 35px;
+            margin-bottom: 10px;
+        }
+
+        .stat-card h3 {
+            margin: 5px 0;
+            font-size: 30px;
+            color: #4f46e5;
+        }
+
+        .stat-card p {
+            margin: 0;
+            color: #6b7280;
+            font-weight: bold;
+        }
+
+
+        /* ==============================
+           DAILY GOAL + STREAK
+        ============================== */
+
+        .goal-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .goal-card {
+            padding: 24px;
+            border-radius: 20px;
+            background: #f8fafc;
+            text-align: center;
+            border: 2px solid #eef2ff;
+        }
+
+        .goal-icon {
+            font-size: 38px;
+            margin-bottom: 8px;
+        }
+
+        .goal-card h3 {
+            margin: 5px 0;
+            font-size: 30px;
+            color: #4f46e5;
+        }
+
+        .goal-card p {
+            margin: 0;
+            color: #6b7280;
+            font-weight: bold;
+        }
+
+        .goal-progress-box {
+            margin-top: 22px;
+            padding: 20px;
+            border-radius: 18px;
+            background: #eef2ff;
+        }
+
+        .goal-progress-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 9px;
+            font-weight: bold;
+            color: #3730a3;
+        }
+
+        .goal-progress-bar {
+            height: 16px;
+            background: #e5e7eb;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .goal-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4f46e5, #ec4899);
+            border-radius: 20px;
+            transition: width 0.5s;
+        }
+
+        .goal-form {
+            margin-top: 22px;
+            display: flex;
+            gap: 12px;
+            align-items: end;
+            flex-wrap: wrap;
+        }
+
+        .goal-form .form-group {
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .goal-save-btn {
+            border: none;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            padding: 13px 22px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .goal-save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(79,70,229,0.25);
+        }
+
+        .streak-badge {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 7px 12px;
+            border-radius: 20px;
+            background: #fef3c7;
+            color: #92400e;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        /* ==============================
+           SECTION
+        ============================== */
+
+        .section {
+            margin-top: 30px;
+
+            background: white;
+
+            border-radius: 24px;
+
+            padding: 30px;
+
+            box-shadow:
+                0 8px 25px rgba(0,0,0,0.07);
+        }
+
+        .section-title {
+            margin-top: 0;
+            color: #3730a3;
+            font-size: 27px;
+        }
+
+
+        /* ==============================
+           ADD PLAN FORM
+        ============================== */
+
+        .form-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #374151;
+        }
+
+        .form-group input {
+            padding: 13px 15px;
+
+            border: 2px solid #e5e7eb;
+
+            border-radius: 12px;
+
+            font-size: 15px;
+
+            outline: none;
+
+            transition: 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: #6366f1;
+
+            box-shadow:
+                0 0 0 3px rgba(99,102,241,0.12);
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .add-btn {
+            border: none;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #4f46e5,
+                    #7c3aed
+                );
+
+            color: white;
+
+            padding: 14px 25px;
+
+            border-radius: 13px;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+
+            width: 100%;
+        }
+
+        .add-btn:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 8px 20px rgba(79,70,229,0.25);
+        }
+
+
+        /* ==============================
+           INFO BOX
+        ============================== */
+
+        .info-box {
+            margin-top: 20px;
+
+            padding: 17px 20px;
+
+            border-radius: 15px;
+
+            background: #eef2ff;
+
+            color: #3730a3;
+
+            line-height: 1.6;
+        }
+
+
+        /* ==============================
+           PLAN CARDS
+        ============================== */
+
+        .plans {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 20px;
+        }
+
+        .plan-card {
+            border: 2px solid #eef2ff;
+
+            border-radius: 20px;
+
+            padding: 22px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffffff,
+                    #f8f7ff
+                );
+
+            transition: 0.3s;
+        }
+
+        .plan-card:hover {
+            transform: translateY(-4px);
+
+            box-shadow:
+                0 10px 25px rgba(0,0,0,0.08);
+        }
+
+        .plan-top {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin-bottom: 15px;
+        }
+
+        .subject-name {
+            font-size: 21px;
+
+            font-weight: bold;
+
+            color: #4338ca;
+        }
+
+        .status {
+            padding: 7px 12px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: bold;
+        }
+
+        .status.completed {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .plan-details {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 10px;
+
+            margin-bottom: 15px;
+        }
+
+        .detail {
+            padding: 12px;
+
+            background: #f8fafc;
+
+            border-radius: 12px;
+        }
+
+        .detail small {
+            display: block;
+
+            color: #6b7280;
+
+            margin-bottom: 4px;
+        }
+
+        .detail strong {
+            color: #111827;
+        }
+
+
+        /* ==============================
+           PLAN PROGRESS
+        ============================== */
+
+        .mini-progress {
+            height: 10px;
+
+            background: #e5e7eb;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+
+            margin: 12px 0;
+        }
+
+        .mini-progress-fill {
+            height: 100%;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #4f46e5,
+                    #ec4899
+                );
+
+            border-radius: 20px;
+        }
+
+        .plan-actions {
+            display: flex;
+
+            gap: 8px;
+
+            flex-wrap: wrap;
+
+            margin-top: 15px;
+        }
+
+        .action-btn {
+            text-decoration: none;
+
+            border: none;
+
+            cursor: pointer;
+
+            padding: 9px 13px;
+
+            border-radius: 10px;
+
+            font-size: 13px;
+
+            font-weight: bold;
+        }
+
+        .complete-btn {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .update-study-form {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin: 0;
+        }
+
+        .update-study-input {
+            width: 72px;
+            padding: 8px 9px;
+            border: 1px solid #c7d2fe;
+            border-radius: 9px;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .update-study-input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.12);
+        }
+
+        .update-study-btn {
+            background: #ede9fe;
+            color: #6d28d9;
+        }
+
+        .edit-btn {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .delete-btn {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+
+        /* ==============================
+           ANALYSIS
+        ============================== */
+
+        .analysis-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 18px;
+        }
+
+        .analysis-card {
+            padding: 22px;
+
+            border-radius: 18px;
+
+            background: #f8fafc;
+
+            text-align: center;
+        }
+
+        .analysis-card h3 {
+            margin: 5px 0;
+
+            font-size: 28px;
+
+            color: #4f46e5;
+        }
+
+        .analysis-card p {
+            margin: 0;
+
+            color: #6b7280;
+
+            font-weight: bold;
+        }
+
+
+        /* ==============================
+           OVERALL PROGRESS
+        ============================== */
+
+        .progress-box {
+            margin-top: 25px;
+        }
+
+        .progress-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            margin-bottom: 8px;
+
+            font-weight: bold;
+        }
+
+        .progress-bar {
+            height: 18px;
+
+            background: #e5e7eb;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #4f46e5,
+                    #ec4899
+                );
+
+            border-radius: 20px;
+
+            transition: width 0.5s;
+        }
+
+
+        /* ==============================
+           SUBJECT PROGRESS
+        ============================== */
+
+        .subject-list {
+            display: grid;
+
+            gap: 15px;
+        }
+
+        .subject-row {
+            padding: 18px;
+
+            border-radius: 16px;
+
+            background: #f8fafc;
+        }
+
+        .subject-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 10px;
+
+            margin-bottom: 8px;
+        }
+
+        .subject-header strong {
+            color: #374151;
+        }
+
+        .subject-header span {
+            color: #4f46e5;
+
+            font-weight: bold;
+        }
+
+        .subject-bar {
+            height: 12px;
+
+            background: #e5e7eb;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+        }
+
+        .subject-fill {
+            height: 100%;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #6366f1,
+                    #a855f7
+                );
+
+            border-radius: 20px;
+        }
+
+        .subject-info {
+            margin-top: 8px;
+
+            color: #6b7280;
+
+            font-size: 13px;
+        }
+
+
+        /* ==============================
+           CHART
+        ============================== */
+
+        .chart-container {
+            position: relative;
+
+            height: 380px;
+
+            width: 100%;
+        }
+
+
+        /* ==============================
+           AI PREDICTION
+        ============================== */
+
+        .prediction {
+            text-align: center;
+
+            padding: 35px;
+
+            border-radius: 22px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #eef2ff,
+                    #fdf2f8
+                );
+        }
+
+        .prediction-icon {
+            font-size: 55px;
+        }
+
+        .prediction h2 {
+            color: #4338ca;
+
+            margin: 10px 0;
+        }
+
+        .score {
+            font-size: 60px;
+
+            font-weight: bold;
+
+            color: #7c3aed;
+
+            margin: 10px 0;
+        }
+
+        .prediction p {
+            color: #4b5563;
+
+            max-width: 700px;
+
+            margin: auto;
+
+            line-height: 1.6;
+        }
+
+
+        /* ==============================
+           MOTIVATION
+        ============================== */
+
+        .motivation {
+            text-align: center;
+
+            padding: 35px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fef3c7,
+                    #fce7f3
+                );
+
+            border-radius: 22px;
+        }
+
+        .motivation h2 {
+            color: #92400e;
+        }
+
+        .motivation p {
+            font-size: 18px;
+
+            font-weight: bold;
+
+            color: #78350f;
+        }
+
+
+        /* ==============================
+           FOOTER
+        ============================== */
+
+        footer {
+            margin: 35px 0;
+
+            padding: 25px;
+
+            text-align: center;
+
+            color: #6b7280;
+
+            font-weight: bold;
+        }
+
+
+        /* ==============================
+           EMPTY MESSAGE
+        ============================== */
+
+        .empty {
+            text-align: center;
+
+            padding: 35px;
+
+            color: #6b7280;
+
+            background: #f8fafc;
+
+            border-radius: 18px;
+        }
+
+
+        /* ==============================
+           RESPONSIVE
+        ============================== */
+
+        @media (max-width: 900px) {
+
+            .stats {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .plans {
+                grid-template-columns: 1fr;
+            }
+
+            .analysis-grid {
+                grid-template-columns:
+                    1fr;
+            }
+
+            .goal-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 650px) {
+
+            .container {
+                width: 94%;
+            }
+
+            .hero {
+                padding: 35px 20px;
+            }
+
+            .hero h1 {
+                font-size: 29px;
+            }
+
+            .stats {
+                grid-template-columns:
+                    1fr;
+            }
+
+            .form-grid {
+                grid-template-columns:
+                    1fr;
+            }
+
+            .full-width {
+                grid-column: auto;
+            }
+
+            .plan-details {
+                grid-template-columns:
+                    1fr;
+            }
+
+            .topbar {
+                justify-content: center;
+                text-align: center;
+            }
+
+            .chart-container {
+                height: 300px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- ==============================
+         BACKGROUND
+    ============================== -->
+
+    <div class="background-doodles">
+
+        <div class="doodle d1">🐍</div>
+
+        <div class="doodle d2">📚</div>
+
+        <div class="doodle d3">💻</div>
+
+        <div class="doodle d4">🤖</div>
+
+        <div class="doodle d5">🧠</div>
+
+        <div class="doodle d6">&lt;/&gt;</div>
+
+        <div class="doodle d7">AI</div>
+
+        <div class="doodle d8">C</div>
+
+    </div>
+
+
+
+    <div class="container">
+
+
+        <!-- ==============================
+             TOP BAR
+        ============================== -->
+
+        <div class="topbar">
+
+            <div class="logo">
+                📚 Smart Study Planner
+            </div>
+
+            <div class="user-area">
+
+                <div class="welcome">
+                    👋 Welcome, {{ username }}
+                </div>
+
+                <a href="/logout"
+                   class="logout-btn">
+                    🚪 Logout
+                </a>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ==============================
+             HERO
+        ============================== -->
+
+        <section class="hero">
+
+            <h1>
+                🎓 Your Smart Study Dashboard
+            </h1>
+
+            <p>
+                Plan your study • Track your actual study time •
+                Understand your progress • Improve your performance 🚀
+            </p>
+
+        </section>
+
+
+
+        <!-- ==============================
+             STATISTICS
+        ============================== -->
+
+        <section class="stats">
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    📚
+                </div>
+
+                <h3>
+                    {{ total_subjects }}
+                </h3>
+
+                <p>
+                    Total Subjects
+                </p>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    ⏰
+                </div>
+
+                <h3>
+                    {{ total_hours }}
+                </h3>
+
+                <p>
+                    Planned Hours
+                </p>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    ✅
+                </div>
+
+                <h3>
+                    {{ studied_hours }}
+                </h3>
+
+                <p>
+                    Actually Studied
+                </p>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    🤖
+                </div>
+
+                <h3>
+                    {{ expected_score }}%
+                </h3>
+
+                <p>
+                    Predicted Performance
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==============================
+             DAILY GOAL + STUDY STREAK
+        ============================== -->
+
+        <section class="section">
+
+            <h2 class="section-title">
+                🎯 Daily Study Goal & 🔥 Study Streak
+            </h2>
+
+            <div class="goal-grid">
+
+                <div class="goal-card">
+
+                    <div class="goal-icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        {{ daily_goal }}
+                    </h3>
+
+                    <p>
+                        Daily Goal (Hours)
+                    </p>
+
+                </div>
+
+
+                <div class="goal-card">
+
+                    <div class="goal-icon">
+                        ⏱️
+                    </div>
+
+                    <h3>
+                        {{ today_hours }}
+                    </h3>
+
+                    <p>
+                        Studied Today (Hours)
+                    </p>
+
+                </div>
+
+
+                <div class="goal-card">
+
+                    <div class="goal-icon">
+                        🔥
+                    </div>
+
+                    <h3>
+                        {{ streak }}
+                    </h3>
+
+                    <p>
+                        Current Study Streak
+                    </p>
+
+                    <span class="streak-badge">
+                        {% if streak > 0 %}
+                            🔥 Keep it going!
+                        {% else %}
+                            📚 Start your streak today!
+                        {% endif %}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="goal-progress-box">
+
+                <div class="goal-progress-header">
+
+                    <span>
+                        📊 Today's Goal Progress
+                    </span>
+
+                    <span>
+                        {{ goal_progress }}%
+                    </span>
+
+                </div>
+
+                <div class="goal-progress-bar">
+
+                    <div
+                        class="goal-progress-fill"
+                        style="width: {{ goal_progress }}%;">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <form
+                action="/set_goal"
+                method="POST"
+                class="goal-form">
+
+                <div class="form-group">
+
+                    <label>
+                        🎯 Set Your Daily Study Goal
+                    </label>
+
+                    <input
+                        type="number"
+                        name="daily_goal"
+                        min="0.5"
+                        step="0.5"
+                        value="{{ daily_goal }}"
+                        placeholder="e.g. 3"
+                        required
+                    >
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="goal-save-btn">
+                    💾 Save Daily Goal
+                </button>
+
+            </form>
+
+
+            <div class="info-box">
+
+                💡 <strong>How it works:</strong>
+
+                Your daily goal is compared with the hours you
+                actually studied today.
+
+                For example, if your goal is
+                <strong>3 hours</strong> and you study
+                <strong>2 hours</strong>, your goal progress is
+                <strong>66.7%</strong>.
+
+                Your 🔥 streak increases when you study on
+                consecutive days.
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==============================
+             ADD STUDY PLAN
+        ============================== -->
+
+        <section class="section">
+
+            <h2 class="section-title">
+                ➕ Add New Study Plan
+            </h2>
+
+
+            <form action="/add_plan"
+                  method="POST">
+
+
+                <div class="form-grid">
+
+
+                    <div class="form-group">
+
+                        <label>
+                            📖 Subject
+                        </label>
+
+                        <input
+                            type="text"
+                            name="subject"
+                            placeholder="e.g. Python"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            📅 Study Date
+                        </label>
+
+                        <input
+                            type="date"
+                            name="date"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            ⏰ Planned Hours
+                        </label>
+
+                        <input
+                            type="number"
+                            name="hours"
+                            min="0"
+                            step="0.5"
+                            placeholder="e.g. 3"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="full-width">
+
+                        <button
+                            type="submit"
+                            class="add-btn"
+                        >
+                            🚀 Add Study Plan
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+
+            <div class="info-box">
+
+                💡 <strong>How it works:</strong>
+
+                First create your plan with the
+                <strong>planned hours</strong>.
+
+                After you actually study, use
+                <strong>📝 Update Study</strong> on that plan
+                to enter your actual studied hours.
+
+                For example, 2 studied hours out of 3 planned
+                gives <strong>66.7%</strong> completion. 🤖📊
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==============================
+             MY STUDY PLANS
+        ============================== -->
+
+        <section class="section">
+
+            <h2 class="section-title">
+                📋 My Study Plans
+            </h2>
+
+
+            {% if plans %}
+
+            <div class="plans">
+
+
+                {% for plan in plans %}
+
+                <div class="plan-card">
+
+
+                    <div class="plan-top">
+
+                        <div class="subject-name">
+                            📘 {{ plan["subject"] }}
+                        </div>
+
+
+                        {% if plan["status"] == "Completed" %}
+
+                        <span class="status completed">
+                            ✅ Completed
+                        </span>
+
+                        {% else %}
+
+                        <span class="status pending">
+                            ⏳ Pending
+                        </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+
+                    <div class="plan-details">
+
+
+                        <div class="detail">
+
+                            <small>
+                                📅 Date
+                            </small>
+
+                            <strong>
+                                {{ plan["date"] }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail">
+
+                            <small>
+                                ⏰ Planned
+                            </small>
+
+                            <strong>
+                                {{ plan["hours"] }} hours
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail">
+
+                            <small>
+                                ✅ Studied
+                            </small>
+
+                            <strong>
+                                {{ plan["studied_hours"] }} hours
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail">
+
+                            <small>
+                                📊 Completion
+                            </small>
+
+                            <strong>
+
+                                {% if plan["hours"]|float > 0 %}
+
+                                    {{ ((plan["studied_hours"]|float / plan["hours"]|float) * 100)|round(1) }}%
+
+                                {% else %}
+
+                                    0%
+
+                                {% endif %}
+
+                            </strong>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    {% if plan["hours"]|float > 0 %}
+
+                        {% set plan_progress =
+                            ((plan["studied_hours"]|float /
+                            plan["hours"]|float) * 100) %}
+
+                    {% else %}
+
+                        {% set plan_progress = 0 %}
+
+                    {% endif %}
+
+
+                    {% if plan_progress > 100 %}
+
+                        {% set plan_progress = 100 %}
+
+                    {% endif %}
+
+
+                    <div class="mini-progress">
+
+                        <div
+                            class="mini-progress-fill"
+                            style="width: {{ plan_progress }}%;">
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="plan-actions">
+
+                        <form
+                            action="/update_study/{{ plan['id'] }}"
+                            method="POST"
+                            class="update-study-form"
+                        >
+
+                            <input
+                                type="number"
+                                name="studied_hours"
+                                class="update-study-input"
+                                min="0"
+                                max="{{ plan['hours'] }}"
+                                step="0.5"
+                                value="{{ plan['studied_hours'] }}"
+                                title="Actual studied hours"
+                                required
+                            >
+
+                            <button
+                                type="submit"
+                                class="action-btn update-study-btn"
+                            >
+                                📝 Update Study
+                            </button>
+
+                        </form>
+
+
+                        <a
+                            href="/edit/{{ plan['id'] }}"
+                            class="action-btn edit-btn"
+                        >
+                            ✏️ Edit
+                        </a>
+
+
+
+                        <form
+                            action="/delete/{{ plan['id'] }}"
+                            method="POST"
+                            style="margin:0;"
+                            onsubmit="return confirm('Delete this study plan?');"
+                        >
+
+                            <button
+                                type="submit"
+                                class="action-btn delete-btn"
+                            >
+                                🗑️ Delete
+                            </button>
+
+                        </form>
+
+
+                    </div>
+
+
+                </div>
+
+                {% endfor %}
+
+
+            </div>
+
+            {% else %}
+
+            <div class="empty">
+
+                📚 No study plans yet.
+
+                <br><br>
+
+                Add your first study plan above! 🚀
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+
+
+        <!-- ==============================
+             PERFORMANCE ANALYSIS
+        ============================== -->
+
+        <section class="section">
+
+            <h2 class="section-title">
+                📊 Performance Analysis
+            </h2>
+
+
+            <div class="analysis-grid">
+
+
+                <div class="analysis-card">
+
+                    <h3>
+                        {{ total_hours }}
+                    </h3>
+
+                    <p>
+                        Planned Hours
+                    </p>
+
+                </div>
+
+
+                <div class="analysis-card">
+
+                    <h3>
+                        {{ completed_hours }}
+                    </h3>
+
+                    <p>
+                        Studied Hours
+                    </p>
+
+                </div>
+
+
+                <div class="analysis-card">
+
+                    <h3>
+                        {{ pending_hours }}
+                    </h3>
+
+                    <p>
+                        Remaining Hours
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="progress-box">
+
+
+                <div class="progress-header">
+
+                    <span>
+                        📈 Overall Study Progress
+                    </span>
+
+                    <span>
+                        {{ progress }}%
+                    </span>
+
+                </div>
+
+
+                <div class="progress-bar">
+
+                    <div
+                        class="progress-fill"
+                        style="width: {{ progress }}%;">
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==============================
+             SUBJECT PROGRESS
+        ============================== -->
+
+        <section class="section">
+
+            <h2 class="section-title">
+                📚 Subject-wise Progress
+            </h2>
+
+
+            {% if subject_progress %}
+
+            <div class="subject-list">
+
+
+                {% for item in subject_progress %}
+
+                <div class="subject-row">
+
+
+                    <div class="subject-header">
+
+                        <strong>
+                            📖 {{ item["subject"] }}
+                        </strong>
+
+                        <span>
+                            {{ item["progress"] }}%
+                        </span>
+
+                    </div>
+
+
+                    <div class="subject-bar">
+
+                        <div
+                            class="subject-fill"
+                            style="width: {{ item['progress'] }}%;">
+                        </div>
+
+                    </div>
+
+
+                    <div class="subject-info">
+
+                        Studied:
+                        <strong>
+                            {{ item["studied"] }} hrs
+                        </strong>
+
+                        &nbsp; | &nbsp;
+
+                        Planned:
+                        <strong>
+                            {{ item["planned"] }} hrs
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+                {% endfor %}
+
+
+            </div>
+
+            {% else %}
+
+            <div class="empty">
+                📚 Add study plans to see subject-wise progress.
+            </div>
+
+            {% endif %}
+
+        </section>
+
+
+
+        <!-- ==============================
+             CHART
+        ============================== -->
+
+        <section class="section">
+
+            <h2 class="section-title">
+                📈 Subject-wise Study Hours
+            </h2>
+
+
+            {% if chart_data["labels"] %}
+
+            <div class="chart-container">
+
+                <canvas id="studyChart"></canvas>
+
+            </div>
+
+            {% else %}
+
+            <div class="empty">
+                📊 Chart will appear after adding study plans.
+            </div>
+
+            {% endif %}
+
+        </section>
+
+
+
+        <!-- ==============================
+             AI PREDICTION
+        ============================== -->
+
+        <section class="section">
+
+            <div class="prediction">
+
+                <div class="prediction-icon">
+                    🤖
+                </div>
+
+                <h2>
+                    AI Performance Prediction
+                </h2>
+
+                <div class="score">
+                    {{ expected_score }}%
+                </div>
+
+                <p>
+
+                    This prediction is generated using a
+                    Machine Learning model based on the
+                    relationship between your planned study
+                    hours and the hours you actually studied.
+
+                    <br><br>
+
+                    📚 More consistent study completion can
+                    help improve your predicted performance.
+
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==============================
+             MOTIVATION
+        ============================== -->
+
+        <section class="section">
+
+            <div class="motivation">
+
+                <h2>
+                    🌟 Today's Motivation
+                </h2>
+
+                <p>
+                    {{ random_motivation_emoji }}
+                    “{{ random_quote }}”
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <footer>
+
+            📚 Smart Study Planner
+
+            <br><br>
+
+            Plan Smart • Study Better • Perform Better 💜
+
+        </footer>
+
+
+    </div>
+
+
+
+    <!-- ==============================
+         CHART SCRIPT
+    ============================== -->
+
+    <script>
+
+        const chartData =
+            {{ chart_data | tojson }};
+
+
+        if (
+            chartData.labels &&
+            chartData.labels.length > 0
+        ) {
+
+            const ctx =
+                document
+                .getElementById("studyChart")
+                .getContext("2d");
+
+
+            new Chart(ctx, {
+
+                type: "bar",
+
+                data: {
+
+                    labels: chartData.labels,
+
+                    datasets: [
+
+                        {
+
+                            label:
+                                "Actually Studied Hours",
+
+                            data:
+                                chartData.values,
+
+                            backgroundColor:
+                                "rgba(79, 70, 229, 0.75)",
+
+                            borderColor:
+                                "rgba(79, 70, 229, 1)",
+
+                            borderWidth: 1,
+
+                            borderRadius: 8
+
+                        }
+
+                    ]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    plugins: {
+
+                        legend: {
+                            display: true
+                        }
+
+                    },
+
+                    scales: {
+
+                        y: {
+
+                            beginAtZero: true,
+
+                            title: {
+
+                                display: true,
+
+                                text:
+                                    "Actually Studied Hours"
+
+                            }
+
+                        },
+
+                        x: {
+
+                            title: {
+
+                                display: true,
+
+                                text:
+                                    "Subjects"
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            });
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>

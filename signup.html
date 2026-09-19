@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Sign Up | Smart Study Planner</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            min-height: 100vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            font-family: Arial, sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #667eea,
+                    #764ba2,
+                    #ff758c
+                );
+
+            overflow: hidden;
+        }
+
+
+        /* =========================
+           FUNKY BACKGROUND DOODLES
+        ========================= */
+
+        .doodle {
+
+            position: fixed;
+
+            font-size: 70px;
+
+            opacity: 0.15;
+
+            animation: float 5s ease-in-out infinite;
+
+            pointer-events: none;
+        }
+
+
+        .d1 {
+            top: 8%;
+            left: 8%;
+        }
+
+
+        .d2 {
+            top: 18%;
+            right: 10%;
+        }
+
+
+        .d3 {
+            bottom: 10%;
+            left: 12%;
+        }
+
+
+        .d4 {
+            bottom: 15%;
+            right: 12%;
+        }
+
+
+        .d5 {
+            top: 45%;
+            left: 3%;
+        }
+
+
+        .d6 {
+            top: 50%;
+            right: 3%;
+        }
+
+
+        @keyframes float {
+
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-15px) rotate(5deg);
+            }
+
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+        }
+
+
+        /* =========================
+           SIGN UP CARD
+        ========================= */
+
+        .signup-card {
+
+            width: 390px;
+
+            padding: 40px;
+
+            background: rgba(255,255,255,0.95);
+
+            border-radius: 25px;
+
+            box-shadow:
+                0 25px 60px rgba(0,0,0,0.25);
+
+            text-align: center;
+
+            position: relative;
+
+            z-index: 5;
+
+            animation: appear 0.7s ease;
+        }
+
+
+        @keyframes appear {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateY(30px)
+                    scale(0.95);
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0)
+                    scale(1);
+            }
+
+        }
+
+
+        /* LOGO */
+
+        .logo {
+
+            font-size: 55px;
+
+            margin-bottom: 5px;
+        }
+
+
+        /* HEADING */
+
+        h1 {
+
+            margin: 5px 0;
+
+            color: #4f46e5;
+
+            font-size: 30px;
+        }
+
+
+        .subtitle {
+
+            color: #666;
+
+            margin-bottom: 30px;
+        }
+
+
+        /* INPUT */
+
+        .input-box {
+
+            text-align: left;
+
+            margin-bottom: 18px;
+        }
+
+
+        label {
+
+            display: block;
+
+            font-weight: bold;
+
+            color: #333;
+
+            margin-bottom: 7px;
+        }
+
+
+        input {
+
+            width: 100%;
+
+            padding: 14px;
+
+            border: 2px solid #e5e7eb;
+
+            border-radius: 12px;
+
+            font-size: 15px;
+
+            outline: none;
+
+            transition: 0.3s;
+        }
+
+
+        input:focus {
+
+            border-color: #667eea;
+
+            box-shadow:
+                0 0 0 4px
+                rgba(102,126,234,0.15);
+        }
+
+
+        /* SIGN UP BUTTON */
+
+        .signup-btn {
+
+            width: 100%;
+
+            padding: 14px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #667eea,
+                    #764ba2
+                );
+
+            color: white;
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            margin-top: 8px;
+
+            transition: 0.3s;
+        }
+
+
+        .signup-btn:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 10px 25px
+                rgba(102,126,234,0.4);
+        }
+
+
+        /* LOGIN LINK */
+
+        .login-link {
+
+            margin-top: 22px;
+
+            color: #666;
+        }
+
+
+        .login-link a {
+
+            color: #5b4de8;
+
+            font-weight: bold;
+
+            text-decoration: none;
+        }
+
+
+        /* HOME LINK */
+
+        .home-link {
+
+            display: inline-block;
+
+            margin-top: 15px;
+
+            color: #777;
+
+            text-decoration: none;
+
+            font-size: 14px;
+        }
+
+
+        .home-link:hover,
+        .login-link a:hover {
+
+            text-decoration: underline;
+        }
+
+
+        /* MOBILE */
+
+        @media (max-width: 500px) {
+
+            .signup-card {
+
+                width: 90%;
+
+                padding: 30px 25px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         FUNKY DOODLES
+    ========================= -->
+
+    <div class="doodle d1">📚</div>
+
+    <div class="doodle d2">🐍</div>
+
+    <div class="doodle d3">🤖</div>
+
+    <div class="doodle d4">🧠</div>
+
+    <div class="doodle d5">&lt;/&gt;</div>
+
+    <div class="doodle d6">✦</div>
+
+
+    <!-- =========================
+         SIGN UP CARD
+    ========================= -->
+
+    <div class="signup-card">
+
+
+        <div class="logo">
+            🎓
+        </div>
+
+
+        <h1>
+            Create Account
+        </h1>
+
+
+        <p class="subtitle">
+            Start your smart study journey 🚀
+        </p>
+
+
+        <form method="POST">
+
+
+            <!-- USERNAME -->
+
+            <div class="input-box">
+
+                <label>
+                    👤 Username
+                </label>
+
+                <input
+                    type="text"
+                    name="username"
+                    placeholder="Create your username"
+                    required
+                    autocomplete="username"
+                >
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+            <div class="input-box">
+
+                <label>
+                    🔐 Password
+                </label>
+
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Create your password"
+                    minlength="4"
+                    required
+                    autocomplete="new-password"
+                >
+
+            </div>
+
+
+            <!-- BUTTON -->
+
+            <button
+                type="submit"
+                class="signup-btn">
+
+                🚀 Create My Account
+
+            </button>
+
+
+        </form>
+
+
+        <!-- LOGIN -->
+
+        <div class="login-link">
+
+            Already have an account?
+
+            <a href="/login">
+                Login here
+            </a>
+
+        </div>
+
+
+        <!-- HOME -->
+
+        <a
+            href="/"
+            class="home-link">
+
+            ← Back to Home
+
+        </a>
+
+
+    </div>
+
+
+</body>
+
+</html>

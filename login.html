@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Login | Smart Study Planner</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #eef2ff,
+                    #f5f3ff,
+                    #e0e7ff
+                );
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            position: relative;
+            overflow: hidden;
+        }
+
+
+        /* =========================
+           BACKGROUND DOODLES
+        ========================= */
+
+        .doodle {
+            position: absolute;
+
+            color: #3730a3;
+
+            opacity: 0.12;
+
+            font-weight: bold;
+
+            pointer-events: none;
+        }
+
+        .d1 {
+            font-size: 90px;
+            top: 8%;
+            left: 8%;
+            transform: rotate(-15deg);
+        }
+
+        .d2 {
+            font-size: 70px;
+            top: 15%;
+            right: 10%;
+            transform: rotate(12deg);
+        }
+
+        .d3 {
+            font-size: 110px;
+            bottom: 10%;
+            left: 7%;
+            transform: rotate(10deg);
+        }
+
+        .d4 {
+            font-size: 75px;
+            bottom: 15%;
+            right: 8%;
+            transform: rotate(-15deg);
+        }
+
+        .d5 {
+            font-size: 65px;
+            top: 45%;
+            left: 3%;
+        }
+
+        .d6 {
+            font-size: 65px;
+            top: 50%;
+            right: 4%;
+        }
+
+
+        /* =========================
+           LOGIN CARD
+        ========================= */
+
+        .login-card {
+
+            width: 400px;
+
+            max-width: 90%;
+
+            background: rgba(255,255,255,0.96);
+
+            padding: 40px;
+
+            border-radius: 22px;
+
+            text-align: center;
+
+            box-shadow:
+                0 15px 40px rgba(0,0,0,0.15);
+
+            position: relative;
+
+            z-index: 5;
+        }
+
+
+        .logo {
+
+            font-size: 55px;
+
+            margin-bottom: 5px;
+        }
+
+
+        h1 {
+
+            margin: 5px 0;
+
+            color: #3730a3;
+
+            font-size: 30px;
+        }
+
+
+        .subtitle {
+
+            color: #666;
+
+            margin-bottom: 30px;
+        }
+
+
+        /* =========================
+           INPUTS
+        ========================= */
+
+        .input-box {
+
+            text-align: left;
+
+            margin-bottom: 18px;
+        }
+
+
+        .input-box label {
+
+            display: block;
+
+            margin-bottom: 7px;
+
+            font-weight: bold;
+
+            color: #374151;
+        }
+
+
+        .input-box input {
+
+            width: 100%;
+
+            padding: 13px 15px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 10px;
+
+            font-size: 15px;
+
+            outline: none;
+
+            transition: 0.3s;
+        }
+
+
+        .input-box input:focus {
+
+            border-color: #4f46e5;
+
+            box-shadow:
+                0 0 0 3px rgba(79,70,229,0.12);
+        }
+
+
+        /* =========================
+           LOGIN BUTTON
+        ========================= */
+
+        .login-button {
+
+            width: 100%;
+
+            padding: 14px;
+
+            margin-top: 10px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #4f46e5,
+                    #6366f1
+                );
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+        }
+
+
+        .login-button:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 7px 18px rgba(79,70,229,0.30);
+        }
+
+
+        /* =========================
+           HOME LINK
+        ========================= */
+
+        .home-link {
+
+            display: inline-block;
+
+            margin-top: 22px;
+
+            color: #4f46e5;
+
+            text-decoration: none;
+
+            font-weight: bold;
+        }
+
+
+        .home-link:hover {
+
+            text-decoration: underline;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .small-text {
+
+            margin-top: 25px;
+
+            font-size: 13px;
+
+            color: #777;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 500px) {
+
+            .login-card {
+
+                padding: 30px 22px;
+            }
+
+            .doodle {
+
+                font-size: 50px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- BACKGROUND DOODLES -->
+
+    <div class="doodle d1">🐍</div>
+
+    <div class="doodle d2">📚</div>
+
+    <div class="doodle d3">C</div>
+
+    <div class="doodle d4">🤖</div>
+
+    <div class="doodle d5">&lt;/&gt;</div>
+
+    <div class="doodle d6">AI</div>
+
+
+
+    <!-- LOGIN CARD -->
+
+    <div class="login-card">
+
+
+        <div class="logo">
+            📚
+        </div>
+
+
+        <h1>
+            Welcome Back!
+        </h1>
+
+
+        <p class="subtitle">
+            Login to your Smart Study Planner
+        </p>
+
+
+
+        <form method="POST">
+
+
+            <div class="input-box">
+
+                <label>
+                    👤 Username
+                </label>
+
+                <input
+                    type="text"
+                    name="username"
+                    placeholder="Enter your username"
+                    required>
+
+            </div>
+
+
+
+            <div class="input-box">
+
+                <label>
+                    🔒 Password
+                </label>
+
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    required>
+
+            </div>
+
+
+
+            <button
+                type="submit"
+                class="login-button">
+
+                🔐 Login
+
+            </button>
+
+
+        </form>
+
+
+        <a
+            href="/"
+            class="home-link">
+
+            ← Back to Home
+
+        </a>
+
+
+        <div class="small-text">
+
+            📚 Study Smart • Stay Organized • Achieve More
+
+        </div>
+
+
+    </div>
+
+
+</body>
+
+</html>
