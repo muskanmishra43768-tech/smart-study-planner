@@ -151,6 +151,11 @@ def init_db():
     conn.close()
 
 
+# Initialize the database when the app is imported by Gunicorn/Render.
+# This is required because Render starts the app with: gunicorn app:app
+init_db()
+
+
 # =========================================================
 # ML PERFORMANCE PREDICTION
 # =========================================================
@@ -1354,7 +1359,6 @@ if __name__ == "__main__":
 
     init_db()
 
-app.run(host="0.0.0.0", port=5000,
-            debug=True
+    app.run(
+        debug=True
     )
-    
